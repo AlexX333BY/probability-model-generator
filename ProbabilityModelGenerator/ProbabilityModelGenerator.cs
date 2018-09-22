@@ -16,7 +16,7 @@ namespace ProbabilityModelGenerator
         protected Stream OutputStream
         { get; set; }  
 
-        public void Generate(double leftBound, double rightBound, double step, long amount)
+        public void Generate(double leftBound, double rightBound, double step, long amount, bool shouldOutputTotalNumber = false)
         {
             if (rightBound < leftBound)
             {
@@ -37,9 +37,12 @@ namespace ProbabilityModelGenerator
 
             var modelData = new Dictionary<double, long>();
             TotalData = 0;
+            double prevDistribution = 0, curDistribution;
             for (double x = leftBound; x <= rightBound; x += step)
             {
-                modelData[x] = (long)(DistributionFunction(x) * amount);
+                curDistribution = DistributionFunction(x);
+                modelData[x] = (long)((curDistribution - prevDistribution) * amount);
+                prevDistribution = curDistribution;
                 TotalData += modelData[x];
             }
 
@@ -52,7 +55,13 @@ namespace ProbabilityModelGenerator
                         outputStreamWriter.WriteLine(valueAmountPair.Key);
                     }
                 }
-            }
+
+                if (shouldOutputTotalNumber)
+                {
+                    outputStreamWriter.WriteLine();
+                    outputStreamWriter.WriteLine("Total amount of data: {0}", TotalData);
+                }
+            }                       
         }
 
         public ProbabilityModelGenerator(DistributionFunctionCallback distributionFunction)
