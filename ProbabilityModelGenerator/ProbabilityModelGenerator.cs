@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace ProbabilityModelGenerator
 {
@@ -46,13 +47,15 @@ namespace ProbabilityModelGenerator
                 TotalData += modelData[x];
             }
 
+            NumberFormatInfo numberFormatInfo = new NumberFormatInfo();
+            numberFormatInfo.NumberDecimalSeparator = ".";
             using (StreamWriter outputStreamWriter = new StreamWriter(OutputStream))
             {
                 foreach (KeyValuePair<double, long> valueAmountPair in modelData)
                 {
                     for (int i = 0; i < valueAmountPair.Value; i++)
                     {
-                        outputStreamWriter.WriteLine(valueAmountPair.Key);
+                        outputStreamWriter.WriteLine(valueAmountPair.Key.ToString(numberFormatInfo));
                     }
                 }
 
