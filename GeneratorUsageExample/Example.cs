@@ -10,7 +10,7 @@ namespace ProbabilityModelGenerator.Example
 
         private static double SimpsonsIntegrate(IntegratableFunctionCallback functionCallback, double leftBound, double rightBound, uint segments)
         {
-            if (segments <= 0)
+            if (segments == 0)
             {
                 throw new ArgumentException("Segments should be positive number");
             }
