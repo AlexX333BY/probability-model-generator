@@ -38,17 +38,16 @@ namespace ProbabilityModelGenerator
 
             var modelData = new Dictionary<double, long>();
             TotalData = 0;
-            double prevDistribution = 0, curDistribution;
-            for (double x = leftBound; x <= rightBound; x += step)
+            for (double x = leftBound + step / 2; (x + step / 2) <= rightBound; x += step)
             {
-                curDistribution = DistributionFunction(x);
-                modelData[x] = (long)((curDistribution - prevDistribution) * amount);
-                prevDistribution = curDistribution;
+                modelData[x] = (long)((DistributionFunction(x + step / 2) - DistributionFunction(x - step / 2)) * amount);
                 TotalData += modelData[x];
             }
 
-            NumberFormatInfo numberFormatInfo = new NumberFormatInfo();
-            numberFormatInfo.NumberDecimalSeparator = ".";
+            NumberFormatInfo numberFormatInfo = new NumberFormatInfo
+            {
+                NumberDecimalSeparator = "."
+            };
             using (StreamWriter outputStreamWriter = new StreamWriter(OutputStream))
             {
                 foreach (KeyValuePair<double, long> valueAmountPair in modelData)
