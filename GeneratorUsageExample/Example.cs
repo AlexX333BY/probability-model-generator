@@ -43,7 +43,7 @@ namespace ProbabilityModelGenerator.Example
 
         private static double AlphaDensity(double x)
         {
-            const int a = 1, b = 1;
+            const double a = 1, b = 1;
 
             return (b / (Math.Pow(x, 2) * Math.Sqrt(2 * Math.PI)))
                 * Math.Exp(-0.5 * Math.Pow(b / x - a, 2));
